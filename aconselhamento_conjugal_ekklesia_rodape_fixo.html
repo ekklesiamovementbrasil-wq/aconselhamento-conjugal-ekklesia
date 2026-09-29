@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aconselhamento Conjugal — Ekklesia Movement</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --card:#ffffff; --text:#1c2434; --muted:#667085;
+    --line:#e4e7ec; --primary:#233a73; --primary2:#38549b; --soft:#eef2ff;
+    --danger:#b42318; --success:#027a48;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:linear-gradient(180deg,#eef2f8 0,#f7f8fb 240px,#f5f7fb 100%);
+    color:var(--text)
+  }
+  .hero{
+    background:linear-gradient(135deg,#172554,#273c75 55%,#405ba7);
+    color:#fff; padding:44px 20px 70px
+  }
+  .wrap{max-width:980px;margin:auto}
+  .brand{font-weight:800;letter-spacing:.12em;font-size:13px;opacity:.92}
+  .hero h1{font-size:clamp(30px,5vw,50px);line-height:1.03;margin:16px 0 10px}
+  .hero p{max-width:760px;font-size:17px;line-height:1.7;opacity:.92;margin:0}
+  main{max-width:980px;margin:-36px auto 80px;padding:0 18px 130px}
+  .notice,.section{
+    background:var(--card);border:1px solid rgba(228,231,236,.9);
+    border-radius:20px;box-shadow:0 14px 40px rgba(16,24,40,.06)
+  }
+  .verse-box{
+    margin:18px 0;
+    padding:20px 22px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#eef2ff,#f8faff);
+    border:1px solid #d8e0ff;
+    color:#233a73;
+  }
+  .verse-box blockquote{
+    margin:0;
+    font-size:18px;
+    line-height:1.65;
+    font-weight:600;
+  }
+  .verse-box .ref{
+    display:block;
+    margin-top:8px;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.04em;
+    color:#405ba7;
+  }
+  .notice{padding:20px 22px;margin-bottom:18px}
+  .notice strong{display:block;margin-bottom:5px}
+  .section{padding:28px;margin:18px 0}
+  .section-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+  .badge{
+    flex:0 0 auto;width:36px;height:36px;border-radius:10px;background:var(--soft);
+    color:var(--primary);display:grid;place-items:center;font-weight:800
+  }
+  h2{margin:2px 0 6px;font-size:23px}
+  .section-desc{color:var(--muted);line-height:1.6;margin:0}
+  .q{padding:22px 0;border-top:1px solid var(--line)}
+  .q:first-of-type{border-top:0}
+  .q-title{font-weight:700;line-height:1.45;margin-bottom:8px}
+  .qid{font-size:12px;color:#98a2b3;font-weight:700;letter-spacing:.05em;margin-right:6px}
+  .hint{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 10px}
+  input[type=text],input[type=email],input[type=number],input[type=date],textarea,select{
+    width:100%;border:1px solid #d0d5dd;border-radius:12px;padding:13px 14px;font:inherit;
+    background:#fff;color:var(--text);outline:none;transition:.2s
+  }
+  textarea{min-height:110px;resize:vertical}
+  input:focus,textarea:focus,select:focus{border-color:#8098d9;box-shadow:0 0 0 4px #eef2ff}
+  .options{display:grid;gap:9px;margin-top:10px}
+  .opt{
+    display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border:1px solid var(--line);
+    border-radius:11px;background:#fcfcfd
+  }
+  .opt:hover{background:#f8f9fc}
+  .opt input{margin-top:3px}
+  .scale{display:grid;grid-template-columns:repeat(11,1fr);gap:6px;align-items:center;margin-top:10px}
+  .scale label{
+    text-align:center;padding:10px 2px;border:1px solid var(--line);border-radius:9px;background:#fff;
+    cursor:pointer;font-size:12px
+  }
+  .scale input{display:none}
+  .scale label:has(input:checked){background:var(--primary);color:white;border-color:var(--primary)}
+  .scale-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:6px}
+  .actions{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:50;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:9px;
+    background:rgba(255,255,255,.97);
+    backdrop-filter:blur(14px);
+    border-top:1px solid var(--line);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    box-shadow:0 -10px 30px rgba(16,24,40,.10);
+    margin:0;
+  }
+  button,.btn{
+    border:0;border-radius:11px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer;
+    text-decoration:none;display:inline-flex;align-items:center;justify-content:center
+  }
+  .primary{background:var(--primary);color:#fff}
+  .secondary{background:#eef2ff;color:var(--primary)}
+  .ghost{background:#f2f4f7;color:#344054}
+  .danger{background:#fef3f2;color:var(--danger)}
+  .status{font-size:13px;color:var(--success);margin-left:auto;align-self:center}
+.btn-ico{width:18px;height:18px;display:inline-block;vertical-align:middle;flex:0 0 auto}
+button{gap:9px}
+button svg{display:block}
+  footer{max-width:980px;margin:0 auto 50px;padding:0 20px;color:var(--muted);font-size:13px;line-height:1.6}
+  .privacy{font-size:13px;color:#475467;line-height:1.6}
+  @media(max-width:680px){
+    .hero{padding:32px 16px 58px}
+    .hero h1{font-size:32px}
+    .hero p{font-size:16px;line-height:1.55}
+    main{margin-top:-30px;padding:0 12px 290px}
+    .notice,.verse-box{padding:16px}
+    .section{padding:20px 16px;border-radius:16px}
+    .notice{border-radius:16px}
+    .section-head{gap:10px}
+    h2{font-size:20px}
+    .q{padding:18px 0}
+    .opt{padding:10px}
+    .scale{grid-template-columns:repeat(6,1fr)}
+    .actions{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:7px;
+      padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+    }
+    .actions button{
+      width:100%;
+      min-height:44px;
+      padding:10px 8px;
+      font-size:13px;
+      line-height:1.2;
+    }
+    .actions button:nth-child(-n+2){
+      grid-column:1 / -1;
+    }
+    .actions button span:last-child{
+      overflow-wrap:anywhere;
+    }
+    .status{display:none}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">EKKLESIA MOVEMENT</div>
+    <h1>Aconselhamento Conjugal</h1>
+    <p>Formulário individual de preparação para aconselhamento pastoral. Responda com sinceridade, responsabilidade pessoal e oração.</p>
+  </div>
+</header>
+
+<main>
+  <div class="notice">
+    <strong>Antes de começar</strong>
+    <div class="privacy">
+      Cada cônjuge deve responder individualmente, sem consultar as respostas do outro.
+      Este arquivo salva o progresso apenas neste navegador. Ao final, use <b>Finalizar formulário</b>: o sistema gera o JSON para análise automática e abre o relatório para salvar em PDF.
+      No celular, o botão <b>Compartilhar / WhatsApp</b> usa o compartilhamento nativo quando disponível; escolha o WhatsApp na lista de aplicativos.
+      Se houver risco imediato de violência, ameaça, coerção ou perigo, procure ajuda presencial e proteção antes de qualquer sessão conjunta.
+    </div>
+  </div>
+
+  <div class="verse-box">
+    <blockquote>
+      “Sejam todos prontos para ouvir, tardios para falar e tardios para irar-se.”
+      <span class="ref">Tiago 1:19 — NVI</span>
+    </blockquote>
+  </div>
+
+  <form id="formulario" autocomplete="off"></form>
+
+  <div class="actions">
+    <button type="button" class="primary" id="btnFinalizar">
+      <span class="btn-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path>
+        </svg>
+      </span>
+      <span>Finalizar formulário</span>
+    </button>
+
+    <button type="button" class="secondary" id="btnShare">
+      <span class="btn-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle>
+          <path d="M8.6 13.5l6.8 4"></path><path d="M15.4 6.5l-6.8 4"></path>
+        </svg>
+      </span>
+      <span>Compartilhar / WhatsApp</span>
+    </button>
+
+    <button type="button" class="ghost" id="btnPdf">
+      <span class="btn-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 18h10"></path><path d="M7 14h10"></path><path d="M9 3h6l4 4v14H5V3z"></path><path d="M15 3v4h4"></path>
+        </svg>
+      </span>
+      <span>Gerar / Salvar PDF</span>
+    </button>
+
+    <button type="button" class="ghost" id="btnJson">
+      <span class="btn-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 8c-2 0-3 1-3 3v2c0 2-1 3-3 3 2 0 3 1 3 3v2c0 2 1 3 3 3"></path>
+          <path d="M16 8c2 0 3 1 3 3v2c0 2 1 3 3 3-2 0-3 1-3 3v2c0 2-1 3-3 3"></path>
+          <path d="M12 8v8"></path>
+        </svg>
+      </span>
+      <span>Exportar JSON</span>
+    </button>
+
+    <button type="button" class="ghost" id="btnSalvar">
+      <span class="btn-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 3h12l2 2v16H5z"></path><path d="M8 3v6h8V3"></path><path d="M9 21v-6h6v6"></path>
+        </svg>
+      </span>
+      <span>Salvar progresso</span>
+    </button>
+
+    <button type="button" class="danger" id="btnLimpar">
+      <span class="btn-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path>
+        </svg>
+      </span>
+      <span>Reiniciar formulário</span>
+    </button>
+
+    <span class="status" id="status">Progresso salvo automaticamente.</span>
+  </div>
+</main>
+
+<footer>
+  Este formulário foi criado para apoio ao aconselhamento pastoral e não substitui atendimento médico, psicológico, jurídico ou serviços de proteção quando necessários.
+</footer>
+
+<script>
+const sections = [
+{
+ title:"Identificação", desc:"Informações básicas para contextualizar o aconselhamento.",
+ qs:[
+  ["Q001","Seu nome","text"],
+  ["Q002","Nome do seu cônjuge","text"],
+  ["Q003","Há quanto tempo vocês estão casados?","text"],
+  ["Q004","Vocês têm filhos?","radio",["Não","Sim"]],
+  ["Q005","Se sim, informe quantos e as idades.","text"],
+  ["Q006","Em poucas palavras, por que vocês estão procurando aconselhamento neste momento?","textarea"],
+  ["Q007","De 0 a 10, como você considera atualmente a saúde do seu casamento?","scale",null,"0 — Muito ruim","10 — Muito saudável"],
+  ["Q008","Por que você deu essa nota?","textarea"]
+ ]},
+{
+ title:"Olhando primeiro para mim", desc:"Antes de avaliar o outro, procure reconhecer suas próprias atitudes, responsabilidades e pecados.",
+ qs:[
+  ["Q009","O que você tem feito, dito ou deixado de fazer que considera errado ou pecaminoso contra seu cônjuge?","textarea","", "Procure responder sem justificar sua atitude pelo comportamento do outro."],
+  ["Q010","Enumere atitudes suas que você acredita que precisam mudar para que a convivência melhore.","textarea","", "Ex.: 1. ...  2. ...  3. ..."],
+  ["Q011","Existe algo pelo qual você entende que precisa pedir perdão ao seu cônjuge?","radio",["Sim","Não","Não tenho certeza"]],
+  ["Q012","Se respondeu sim ou não tem certeza, explique.","textarea"],
+  ["Q013","Quando vocês discutem, quais reações costumam aparecer em você?","checkbox",["Levanto a voz","Fico em silêncio","Saio do ambiente","Tento conversar","Faço acusações","Trago problemas antigos","Uso ironia ou sarcasmo","Digo coisas das quais me arrependo","Tento provar que estou certo","Tenho dificuldade de admitir meu erro","Peço perdão quando percebo que errei","Outro"]],
+  ["Q014","Qual comportamento seu durante os conflitos você mais gostaria de mudar?","textarea"],
+  ["Q015","Você acredita que tem ouvido seu cônjuge para realmente compreendê-lo ou apenas para responder?","radio",["Quase sempre procuro compreender","Na maioria das vezes","Algumas vezes","Raramente","Normalmente apenas tento me defender"]],
+  ["Q016","Existe alguma atitude sua que você normalmente justifica dizendo: “Eu faço isso porque ele/ela faz aquilo”?","textarea"]
+ ]},
+{
+ title:"Como eu enxergo nosso casamento", desc:"Percepções sobre os principais problemas, forças e áreas de tensão.",
+ qs:[
+  ["Q017","Quais são, na sua opinião, os três maiores problemas que vocês enfrentam hoje?","textarea"],
+  ["Q018","Qual desses problemas é o mais urgente?","textarea"],
+  ["Q019","Quando você acredita que esse problema começou?","textarea"],
+  ["Q020","Existe algum acontecimento específico que marcou uma mudança no relacionamento?","textarea"],
+  ["Q021","Em quais áreas vocês têm enfrentado maiores dificuldades?","checkbox",["Comunicação","Confiança","Perdão","Intimidade emocional","Intimidade sexual","Finanças","Criação dos filhos","Responsabilidades domésticas","Relacionamento com familiares","Trabalho","Falta de tempo juntos","Vida espiritual","Ciúmes","Redes sociais/celular","Amizades","Infidelidade","Pornografia","Mentiras","Agressividade","Falta de carinho","Falta de diálogo","Outro"]],
+  ["Q022","O que ainda funciona bem no casamento de vocês? Liste pelo menos três pontos positivos.","textarea"],
+  ["Q023","O que você admira em seu cônjuge?","textarea","", "Procure mencionar pelo menos três características."]
+ ]},
+{
+ title:"O que me machuca no relacionamento", desc:"Descreva comportamentos e situações concretas, evitando apenas rótulos.",
+ qs:[
+  ["Q024","Quais atitudes do seu cônjuge atualmente mais machucam você?","textarea"],
+  ["Q025","Dessas atitudes, quais são as três que mais precisam ser tratadas?","textarea"],
+  ["Q026","Existe alguma mágoa que você acredita que ainda não conseguiu resolver ou perdoar?","radio",["Não","Sim","Não tenho certeza"]],
+  ["Q027","Se sim, descreva brevemente.","textarea"],
+  ["Q028","Existe algum assunto que vocês evitam conversar porque quase sempre termina em discussão?","textarea"]
+ ]},
+{
+ title:"O que eu espero do meu cônjuge", desc:"Expresse expectativas de forma clara, concreta e responsável.",
+ qs:[
+  ["Q029","O que você gostaria que seu cônjuge começasse a fazer para que o relacionamento melhorasse?","textarea"],
+  ["Q030","O que você gostaria que seu cônjuge deixasse de fazer?","textarea"],
+  ["Q031","Complete: “Eu me sentiria mais amado(a) por meu cônjuge se ele/ela...”","textarea"],
+  ["Q032","Complete: “Uma mudança no comportamento do meu cônjuge que faria grande diferença para mim seria...”","textarea"],
+  ["Q033","Você acredita que já comunicou claramente essas necessidades?","radio",["Sim, claramente","Já tentei, mas não consigo comunicar bem","Algumas delas","Não","Não sei"]]
+ ]},
+{
+ title:"O que eu estou disposto a mudar", desc:"O aconselhamento não começa apenas com o que espero do outro, mas com aquilo que estou disposto a tratar em mim.",
+ qs:[
+  ["Q034","Diante das coisas que gostaria que seu cônjuge mudasse, o que você está disposto a mudar?","textarea"],
+  ["Q035","Enumere três compromissos pessoais que você poderia assumir imediatamente.","textarea"],
+  ["Q036","Qual frase mais representa sua posição hoje?","radio",["Quero lutar pelo nosso casamento","Quero tentar, mas estou muito cansado(a)","Ainda não sei se quero continuar","Estou pensando seriamente em separação","Já decidi que quero me separar","Outro"]],
+  ["Q037","De 0 a 10, quanto você está disposto a trabalhar pessoalmente para que o casamento melhore?","scale",null,"0 — Não estou disposto","10 — Estou completamente disposto"],
+  ["Q038","O que precisaria acontecer para essa nota aumentar?","textarea"]
+ ]},
+{
+ title:"Minha vida com Deus", desc:"Como está sua caminhada pessoal com Deus, independentemente da condição espiritual do seu cônjuge?",
+ qs:[
+  ["Q039","Como você considera atualmente sua vida com Deus?","scale",null,"0 — Muito distante","10 — Comunhão profunda"],
+  ["Q040","Por que você deu essa nota?","textarea"],
+  ["Q041","Como está sua vida de oração pessoal?","radio",["Oro diariamente","Oro com frequência","Oro algumas vezes durante a semana","Oro principalmente quando enfrento problemas","Raramente oro","Atualmente não tenho orado"]],
+  ["Q042","Como está sua leitura e meditação na Palavra de Deus?","radio",["Diariamente","Várias vezes por semana","Ocasionalmente","Raramente","Atualmente não tenho lido a Bíblia"]],
+  ["Q043","Como está sua participação na comunhão da igreja?","radio",["Estou participando e envolvido","Participo dos cultos, mas pouco das demais atividades","Minha participação diminuiu","Tenho me afastado da igreja","Atualmente não tenho participado"]],
+  ["Q044","Você considera que sua vida espiritual tem influenciado positivamente seu casamento?","radio",["Muito","Em parte","Pouco","Não","Não sei"]],
+  ["Q045","Existe alguma área de sua vida em que você sabe que está em desobediência a Deus e que pode estar afetando seu casamento?","textarea"],
+  ["Q046","Existe algum pecado, hábito, vício, ressentimento ou comportamento que você entende que precisa abandonar?","textarea"],
+  ["Q047","Quando você percebe que pecou contra seu cônjuge, qual costuma ser sua reação?","radio",["Reconheço meu erro e peço perdão","Reconheço, mas tenho dificuldade de pedir perdão","Tento justificar meu comportamento","Espero que o assunto passe","Normalmente considero que o outro também é culpado","Tenho dificuldade de reconhecer meus erros"]],
+  ["Q048","Você acredita que seu relacionamento com Deus precisa mudar para que seu casamento também mude?","radio",["Sim","Em parte","Não","Não sei"]],
+  ["Q049","O que você acredita que Deus precisa transformar primeiramente em você?","textarea"]
+ ]},
+{
+ title:"Nossa comunhão espiritual como casal", desc:"A fé também pode ser vivida como casal: oração, Palavra, serviço, perdão e decisões à luz de Deus.",
+ qs:[
+  ["Q050","De 0 a 10, como você avalia a comunhão espiritual de vocês como casal?","scale",null,"0 — Praticamente inexistente","10 — Muito profunda"],
+  ["Q051","Por que você deu essa nota?","textarea"],
+  ["Q052","Vocês costumam orar juntos?","radio",["Diariamente","Algumas vezes por semana","Ocasionalmente","Apenas em situações difíceis","Raramente","Nunca"]],
+  ["Q053","Vocês costumam ler a Bíblia, fazer devocional ou conversar sobre a Palavra juntos?","radio",["Frequentemente","Algumas vezes","Raramente","Nunca"]],
+  ["Q054","Vocês conversam espontaneamente sobre aquilo que Deus está ensinando a cada um?","radio",["Frequentemente","Algumas vezes","Raramente","Nunca"]],
+  ["Q055","Vocês conseguem orar um pelo outro?","radio",["Sim, frequentemente","Algumas vezes","Raramente","Nunca","Atualmente não me sinto confortável fazendo isso"]],
+  ["Q056","Vocês frequentam a igreja juntos?","radio",["Sim, regularmente","Na maioria das vezes","Às vezes","Raramente","Não"]],
+  ["Q057","Vocês servem juntos ou apoiam o serviço um do outro na igreja?","radio",["Sim","Em parte","Pouco","Não"]],
+  ["Q058","A fé cristã participa das decisões importantes da família?","radio",["Sempre","Na maioria das vezes","Algumas vezes","Raramente","Nunca"]],
+  ["Q059","Quando há um conflito, vocês conseguem buscar princípios bíblicos para lidar com a situação?","radio",["Frequentemente","Algumas vezes","Raramente","Nunca"]],
+  ["Q060","Em momentos de conflito, a fé aproxima vocês ou também se torna motivo de conflito?","textarea"],
+  ["Q061","Existe alguma diferença importante entre vocês em relação à fé, igreja, doutrina ou prática cristã?","textarea"],
+  ["Q062","Um de vocês sente que está caminhando espiritualmente sozinho dentro do casamento?","radio",["Não","Sim","Às vezes"]],
+  ["Q063","Se desejar, explique.","textarea"],
+  ["Q064","Você sente liberdade para falar com seu cônjuge sobre suas lutas espirituais?","radio",["Sim","Na maioria das vezes","Algumas vezes","Não"]],
+  ["Q065","Seu cônjuge conhece suas principais lutas espirituais?","radio",["Sim","Algumas","Muito pouco","Não"]],
+  ["Q066","Você considera que consegue demonstrar graça ao seu cônjuge quando ele/ela falha?","radio",["Frequentemente","Algumas vezes","Raramente","Tenho muita dificuldade"]],
+  ["Q067","O perdão cristão tem sido uma realidade no casamento de vocês ou existem pecados constantemente trazidos novamente à discussão?","textarea"],
+  ["Q068","Existe alguma área espiritual que você gostaria que vocês começassem a praticar juntos?","checkbox",["Orar juntos","Ler a Bíblia juntos","Fazer devocionais","Participar mais da igreja","Servir juntos","Conversar mais sobre Deus","Orar pelos filhos","Aprender a perdoar biblicamente","Ter maior prestação de contas","Desenvolver rotina espiritual no lar","Outra"]],
+  ["Q069","O que você sente falta espiritualmente no seu casamento?","textarea"],
+  ["Q070","O que você gostaria de receber espiritualmente do seu cônjuge?","textarea"],
+  ["Q071","O que você acredita que seu cônjuge precisa receber espiritualmente de você?","textarea"],
+  ["Q072","Existe alguma coisa que você cobra espiritualmente do seu cônjuge, mas reconhece que também não tem oferecido?","textarea"],
+  ["Q073","Se você pudesse escolher três mudanças na vida espiritual de vocês como casal, quais seriam?","textarea"],
+  ["Q074","Complete: “Eu gostaria que nossa família fosse conhecida espiritualmente por...”","textarea"]
+ ]},
+{
+ title:"Restauração do casamento", desc:"Pense no futuro, nas forças do relacionamento e nos objetivos do aconselhamento.",
+ qs:[
+  ["Q075","Se os problemas atuais fossem resolvidos, como você gostaria que seu casamento estivesse daqui a um ano?","textarea"],
+  ["Q076","O que existia no início do relacionamento que você gostaria que recuperassem?","textarea"],
+  ["Q077","Qual foi um dos melhores momentos que vocês já viveram juntos?","textarea"],
+  ["Q078","O que faz você acreditar que ainda vale a pena lutar pelo casamento?","textarea"],
+  ["Q079","Quais seriam os três principais objetivos que você gostaria de alcançar através do aconselhamento?","textarea"]
+ ]},
+{
+ title:"Questões importantes e confidenciais", desc:"Estas respostas ajudam o conselheiro a avaliar segurança e a forma adequada de conduzir o acompanhamento.",
+ qs:[
+  ["Q080","Existe atualmente alguma dessas situações no relacionamento?","checkbox",["Agressão física","Ameaças","Medo do cônjuge","Controle excessivo","Humilhações frequentes","Coerção sexual","Infidelidade","Pornografia","Uso abusivo de álcool","Uso de drogas","Ameaça de suicídio ou automutilação","Ameaças contra o cônjuge ou filhos","Nenhuma dessas situações","Outra situação importante"]],
+  ["Q081","Existe alguma informação que você gostaria de conversar individualmente com o pastor/conselheiro antes de uma conversa conjunta?","radio",["Não","Sim"]],
+  ["Q082","Se sim, descreva apenas aquilo que se sentir confortável em registrar.","textarea"],
+  ["Q083","Há algo importante sobre seu casamento que não foi perguntado neste formulário?","textarea"]
+ ]},
+{
+ title:"Reflexão final", desc:"Encerre pensando menos no que o outro deve fazer e mais naquilo que Deus pode trabalhar em você.",
+ qs:[
+  ["Q084","Complete: “Para que nosso casamento seja diferente, reconheço diante de Deus que eu preciso...”","textarea"],
+  ["Q085","Complete: “Minha oração por nosso casamento neste momento é...”","textarea"],
+  ["Q086","Complete: “Minha oração pelo meu cônjuge neste momento é...”","textarea"],
+  ["Q087","Complete: “Aquilo que mais desejo que Deus faça em mim através deste processo é...”","textarea"]
+ ]}
+];
+
+const form = document.getElementById("formulario");
+const statusEl = document.getElementById("status");
+
+function esc(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+function makeField(q){
+  const [id,title,type,opts,h1,h2] = q;
+  let field = "";
+  if(type==="text") field=`<input type="text" id="${id}" name="${id}">`;
+  if(type==="textarea") field=`<textarea id="${id}" name="${id}"></textarea>`;
+  if(type==="radio"){
+    field=`<div class="options">${opts.map((o,i)=>`<label class="opt"><input type="radio" name="${id}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join("")}</div>`;
+  }
+  if(type==="checkbox"){
+    field=`<div class="options">${opts.map((o,i)=>`<label class="opt"><input type="checkbox" name="${id}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join("")}</div>`;
+  }
+  if(type==="scale"){
+    field=`<div class="scale">${Array.from({length:11},(_,i)=>`<label><input type="radio" name="${id}" value="${i}">${i}</label>`).join("")}</div>
+    <div class="scale-labels"><span>${esc(h1||"0")}</span><span>${esc(h2||"10")}</span></div>`;
+  }
+  const hint = (type!=="scale" && h1) ? `<p class="hint">${esc(h1)}</p>` : "";
+  return `<div class="q"><div class="q-title"><span class="qid">[${id}]</span>${esc(title)}</div>${hint}${field}</div>`;
+}
+
+sections.forEach((s,idx)=>{
+  const el=document.createElement("section");
+  el.className="section";
+  el.innerHTML=`<div class="section-head"><div class="badge">${idx+1}</div><div><h2>${esc(s.title)}</h2><p class="section-desc">${esc(s.desc)}</p></div></div>${s.qs.map(makeField).join("")}`;
+  form.appendChild(el);
+});
+
+function collect(){
+  const data={meta:{formulario:"aconselhamento-conjugal",versao:"1.0",geradoEm:new Date().toISOString()},respostas:{}};
+  sections.flatMap(s=>s.qs).forEach(q=>{
+    const [id,title,type]=q;
+    let value="";
+    if(type==="checkbox"){
+      value=[...document.querySelectorAll(`input[name="${id}"]:checked`)].map(x=>x.value);
+    } else if(type==="radio"||type==="scale"){
+      value=document.querySelector(`input[name="${id}"]:checked`)?.value || "";
+    } else {
+      value=document.getElementById(id)?.value || "";
+    }
+    data.respostas[id]={pergunta:title,resposta:value};
+  });
+  return data;
+}
+
+function saveLocal(show=false){
+  localStorage.setItem("ekklesia_aconselhamento_v1",JSON.stringify(collect()));
+  if(show){
+    statusEl.textContent="Progresso salvo neste navegador.";
+    setTimeout(()=>statusEl.textContent="Progresso salvo automaticamente.",1800);
+  }
+}
+let saveTimer;
+form.addEventListener("input",()=>{
+  clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveLocal(false),400);
+});
+
+function restore(){
+  const raw=localStorage.getItem("ekklesia_aconselhamento_v1");
+  if(!raw) return;
+  try{
+    const data=JSON.parse(raw);
+    for(const [id,obj] of Object.entries(data.respostas||{})){
+      const value=obj.resposta;
+      const el=document.getElementById(id);
+      if(el){el.value=value||"";continue;}
+      if(Array.isArray(value)){
+        document.querySelectorAll(`input[name="${id}"]`).forEach(i=>i.checked=value.includes(i.value));
+      }else{
+        const r=[...document.querySelectorAll(`input[name="${id}"]`)].find(i=>i.value===String(value));
+        if(r) r.checked=true;
+      }
+    }
+  }catch(e){}
+}
+restore();
+
+document.getElementById("btnSalvar").onclick=()=>saveLocal(true);
+
+document.getElementById("btnLimpar").onclick=()=>{
+  if(confirm("Deseja reiniciar o formulário? As respostas salvas neste navegador serão apagadas.")){
+    localStorage.removeItem("ekklesia_aconselhamento_v1");
+    form.reset();
+    window.location.reload();
+  }
+};
+
+function safeName(){
+  const data=collect();
+  return (data.respostas.Q001?.resposta||"respondente")
+    .trim()
+    .replace(/[^\p{L}\p{N}\-_]+/gu,"-");
+}
+function jsonFile(){
+  const data=collect();
+  const nome=safeName();
+  return new File(
+    [JSON.stringify(data,null,2)],
+    `aconselhamento-${nome||"respondente"}.json`,
+    {type:"application/json;charset=utf-8"}
+  );
+}
+function downloadJson(){
+  const file=jsonFile();
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(file);
+  a.download=file.name;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+document.getElementById("btnJson").onclick=downloadJson;
+
+function buildReport(){
+  const data=collect();
+  const nome=data.respostas.Q001?.resposta||"Respondente";
+  const spouse=data.respostas.Q002?.resposta||"";
+  let body="";
+  sections.forEach((s)=>{
+    body+=`<section><h2>${esc(s.title)}</h2>`;
+    s.qs.forEach(q=>{
+      const [id,title]=q; let v=data.respostas[id]?.resposta;
+      if(Array.isArray(v)) v=v.length?v.join(", "):"—";
+      if(v===undefined||v===null||String(v).trim()==="") v="—";
+      body+=`<div class="item"><div class="question"><span>[${id}]</span>${esc(title)}</div><div class="answer">${esc(v)}</div></div>`;
+    });
+    body+=`</section>`;
+  });
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Aconselhamento - ${esc(nome)}</title>
+  <style>
+  @page{size:A4;margin:14mm}
+  body{font-family:Arial,Helvetica,sans-serif;color:#172033;margin:0;font-size:11.2pt}
+  header{border-bottom:3px solid #233a73;padding-bottom:12px;margin-bottom:20px}
+  .brand{font-size:9pt;letter-spacing:.14em;color:#233a73;font-weight:700}
+  h1{font-size:24pt;margin:5px 0 4px} .meta{color:#667085;font-size:10pt}
+  section{break-inside:avoid-page;margin:0 0 22px}
+  h2{font-size:15pt;color:#233a73;border-bottom:1px solid #dfe3eb;padding-bottom:6px;margin:0 0 8px}
+  .item{padding:9px 0;border-bottom:1px solid #eceff3;break-inside:avoid}
+  .question{font-weight:700;line-height:1.35}.question span{color:#98a2b3;font-size:8.5pt;margin-right:5px}
+  .answer{white-space:pre-wrap;line-height:1.5;margin-top:4px}
+  footer{margin-top:24px;color:#667085;font-size:9pt}
+  </style></head><body>
+  <header><div class="brand">EKKLESIA MOVEMENT</div><h1>Aconselhamento Conjugal</h1>
+  <div class="meta">Respondente: <b>${esc(nome)}</b>${spouse?` &nbsp; • &nbsp; Cônjuge: <b>${esc(spouse)}</b>`:""}<br>
+  Gerado em: ${new Date().toLocaleString("pt-BR")}</div></header>
+  ${body}
+  <footer>Documento confidencial destinado ao processo de aconselhamento pastoral.</footer>
+  <script>window.onload=()=>setTimeout(()=>window.print(),300)<\/script>
+  </body></html>`;
+}
+
+function openPdfPrint(){
+  saveLocal(false);
+  const win=window.open("","_blank");
+  if(!win){
+    alert("O navegador bloqueou a nova janela. Permita pop-ups para gerar o PDF.");
+    return false;
+  }
+  win.document.open();
+  win.document.write(buildReport());
+  win.document.close();
+  return true;
+}
+
+document.getElementById("btnPdf").onclick=openPdfPrint;
+
+document.getElementById("btnFinalizar").onclick=()=>{
+  saveLocal(false);
+  downloadJson();
+  setTimeout(()=>{
+    openPdfPrint();
+    statusEl.textContent="JSON gerado. Agora salve o relatório como PDF.";
+    setTimeout(()=>statusEl.textContent="Progresso salvo automaticamente.",3500);
+  },350);
+};
+
+document.getElementById("btnShare").onclick=async()=>{
+  saveLocal(false);
+  const file=jsonFile();
+  const nome=collect().respostas.Q001?.resposta||"respondente";
+  const texto=`Aconselhamento conjugal - ${nome}. Estou enviando o arquivo de respostas para análise pastoral.`;
+
+  if(navigator.share){
+    try{
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({
+          title:"Aconselhamento Conjugal",
+          text:texto,
+          files:[file]
+        });
+        return;
+      }
+      await navigator.share({
+        title:"Aconselhamento Conjugal",
+        text:texto
+      });
+      alert("Seu navegador abriu o compartilhamento sem anexar o arquivo. Anexe o JSON ou PDF manualmente no WhatsApp.");
+      return;
+    }catch(e){
+      if(e && e.name==="AbortError") return;
+    }
+  }
+
+  const msg=encodeURIComponent(texto + "\n\nAnexe também o arquivo JSON e, se possível, o PDF gerado pelo formulário.");
+  window.open(`https://wa.me/?text=${msg}`,"_blank");
+  alert("O WhatsApp foi aberto com a mensagem. Por segurança do navegador, anexe o JSON/PDF manualmente.");
+};
+</script>
+</body>
+</html>
