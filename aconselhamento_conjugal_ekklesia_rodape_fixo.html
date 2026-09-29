@@ -137,6 +137,7 @@ button svg{display:block}
       grid-template-columns:repeat(2,minmax(0,1fr));
       gap:7px;
       padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+      transition:transform .2s ease,opacity .2s ease;
     }
     .actions button{
       width:100%;
@@ -152,6 +153,11 @@ button svg{display:block}
       overflow-wrap:anywhere;
     }
     .status{display:none}
+    body.teclado-aberto .actions{
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(110%);
+    }
   }
 </style>
 </head>
@@ -444,6 +450,18 @@ let saveTimer;
 form.addEventListener("input",()=>{
   clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveLocal(false),400);
 });
+
+function atualizarBarraNoTeclado(){
+  const campoAtivo=document.activeElement;
+  const editando=campoAtivo && /^(INPUT|TEXTAREA|SELECT)$/.test(campoAtivo.tagName);
+  const tecladoAberto=window.visualViewport && window.visualViewport.height < window.innerHeight*.75;
+  document.body.classList.toggle("teclado-aberto",Boolean(editando&&tecladoAberto));
+}
+if(window.visualViewport){
+  window.visualViewport.addEventListener("resize",atualizarBarraNoTeclado);
+}
+form.addEventListener("focusin",()=>setTimeout(atualizarBarraNoTeclado,50));
+form.addEventListener("focusout",()=>setTimeout(atualizarBarraNoTeclado,50));
 
 function restore(){
   const raw=localStorage.getItem("ekklesia_aconselhamento_v1");
