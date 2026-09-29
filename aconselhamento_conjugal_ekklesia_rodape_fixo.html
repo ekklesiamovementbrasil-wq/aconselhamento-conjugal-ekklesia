@@ -123,7 +123,7 @@ button svg{display:block}
     .hero{padding:32px 16px 58px}
     .hero h1{font-size:32px}
     .hero p{font-size:16px;line-height:1.55}
-    main{margin-top:-30px;padding:0 12px 290px}
+    main{margin-top:-30px;padding:0 12px 40px}
     .notice,.verse-box{padding:16px}
     .section{padding:20px 16px;border-radius:16px}
     .notice{border-radius:16px}
@@ -132,12 +132,42 @@ button svg{display:block}
     .q{padding:18px 0}
     .opt{padding:10px}
     .scale{grid-template-columns:repeat(6,1fr)}
-    .actions{
+    .acoes-menu{
+      margin:16px 0 18px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      overflow:hidden;
+    }
+    .acoes-menu summary{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height:50px;
+      padding:12px 14px;
+      color:var(--primary);
+      font-weight:800;
+      cursor:pointer;
+      list-style:none;
+    }
+    .acoes-menu summary::-webkit-details-marker{display:none}
+    .acoes-menu summary::before{content:"☰";font-size:21px;line-height:1}
+    .acoes-menu[open] summary{border-bottom:1px solid var(--line)}
+    .acoes-menu .actions{
+      position:static;
+      left:auto;
+      right:auto;
+      bottom:auto;
+      z-index:auto;
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
       gap:7px;
       padding:8px 12px calc(8px + env(safe-area-inset-bottom));
-      transition:transform .2s ease,opacity .2s ease;
+      margin:0;
+      background:#fff;
+      backdrop-filter:none;
+      border:0;
+      box-shadow:none;
     }
     .actions button{
       width:100%;
@@ -153,11 +183,6 @@ button svg{display:block}
       overflow-wrap:anywhere;
     }
     .status{display:none}
-    body.teclado-aberto .actions{
-      opacity:0;
-      pointer-events:none;
-      transform:translateY(110%);
-    }
   }
 </style>
 </head>
@@ -393,6 +418,28 @@ const sections = [
 
 const form = document.getElementById("formulario");
 const statusEl = document.getElementById("status");
+const actionsEl = document.querySelector(".actions");
+const mediaAcoesMoveis = window.matchMedia("(max-width:680px)");
+
+function organizarAcoes(){
+  let menu=document.querySelector(".acoes-menu");
+  if(mediaAcoesMoveis.matches){
+    if(!menu){
+      menu=document.createElement("details");
+      menu.className="acoes-menu";
+      const titulo=document.createElement("summary");
+      titulo.textContent="Menu do formulário";
+      menu.appendChild(titulo);
+      form.before(menu);
+    }
+    menu.appendChild(actionsEl);
+  }else if(menu){
+    form.after(actionsEl);
+    menu.remove();
+  }
+}
+organizarAcoes();
+mediaAcoesMoveis.addEventListener("change",organizarAcoes);
 
 function esc(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 
@@ -450,18 +497,6 @@ let saveTimer;
 form.addEventListener("input",()=>{
   clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveLocal(false),400);
 });
-
-function atualizarBarraNoTeclado(){
-  const campoAtivo=document.activeElement;
-  const editando=campoAtivo && /^(INPUT|TEXTAREA|SELECT)$/.test(campoAtivo.tagName);
-  const tecladoAberto=window.visualViewport && window.visualViewport.height < window.innerHeight*.75;
-  document.body.classList.toggle("teclado-aberto",Boolean(editando&&tecladoAberto));
-}
-if(window.visualViewport){
-  window.visualViewport.addEventListener("resize",atualizarBarraNoTeclado);
-}
-form.addEventListener("focusin",()=>setTimeout(atualizarBarraNoTeclado,50));
-form.addEventListener("focusout",()=>setTimeout(atualizarBarraNoTeclado,50));
 
 function restore(){
   const raw=localStorage.getItem("ekklesia_aconselhamento_v1");
